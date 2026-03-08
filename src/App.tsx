@@ -8,12 +8,14 @@ import Cart from './pages/Cart';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Admin from './pages/Admin';
+import Login from './pages/Login';
 import { useCart } from './hooks/useCart';
 import { Product } from './types';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const { cart, addToCart, removeFromCart, updateQuantity, total } = useCart();
 
   const handleProductClick = (product: Product) => {
@@ -56,7 +58,7 @@ export default function App() {
       case 'contact':
         return <Contact />;
       case 'admin':
-        return <Admin />;
+        return isAdminAuthenticated ? <Admin /> : <Login onLogin={() => setIsAdminAuthenticated(true)} />;
       default:
         return <Home onShopNow={() => setCurrentPage('shop')} />;
     }

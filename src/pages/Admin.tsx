@@ -6,8 +6,10 @@ import { Product } from '../types';
 export default function Admin() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [adminProfile, setAdminProfile] = useState({ profile_pic: '' });
   const [formData, setFormData] = useState({
     name: '',
     price: '',
@@ -20,6 +22,7 @@ export default function Admin() {
 
   useEffect(() => {
     fetchProducts();
+    fetchAdminProfile();
   }, []);
 
   const fetchProducts = () => {
@@ -32,11 +35,37 @@ export default function Admin() {
       });
   };
 
+  const fetchAdminProfile = () => {
+    fetch('/api/admin/profile')
+      .then(res => res.json())
+      .then(data => setAdminProfile(data));
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       setSelectedFile(file);
       setPreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
+  const handleProfilePicSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const data = new FormData();
+    if (selectedFile) {
+      data.append('image', selectedFile);
+    } else if (formData.imageUrl) {
+      data.append('imageUrl', formData.imageUrl);
+    }
+
+    try {
+      const res = await fetch('/api/admin/profile-pic', { method: 'POST', body: data });
+      if (res.ok) {
+        fetchAdminProfile();
+        setIsProfileModalOpen(false);
+      }
+    } catch (error) {
+      console.error("Error updating profile pic", error);
     }
   };
 
@@ -111,17 +140,32 @@ export default function Admin() {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-linear-to-r from-blue-600 to-purple-600 rounded-[2.5rem] p-8 md:p-12 mb-12 text-white shadow-2xl shadow-purple-500/20 flex flex-col md:flex-row items-center gap-8"
+          className="relative bg-linear-to-r from-blue-600 to-purple-600 rounded-[2.5rem] p-8 md:p-12 mb-12 text-white shadow-2xl shadow-purple-500/20 flex flex-col md:flex-row items-center gap-8 overflow-hidden"
         >
-          <div className="w-32 h-32 rounded-full border-4 border-white/20 overflow-hidden bg-white/10 flex-shrink-0">
-            <img 
-              src="https://picsum.photos/seed/admin/300/300" 
-              alt="Admin" 
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
-            />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
+          
+          <div className="relative group">
+            <div className="w-32 h-32 rounded-full border-4 border-white/20 overflow-hidden bg-white/10 flex-shrink-0">
+              <img 
+                src={adminProfile.profile_pic} 
+                alt="Admin" 
+                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            <button 
+              onClick={() => {
+                setFormData({ ...formData, imageUrl: adminProfile.profile_pic });
+                setPreviewUrl(adminProfile.profile_pic);
+                setIsProfileModalOpen(true);
+              }}
+              className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full"
+            >
+              <Edit2 size={20} />
+            </button>
           </div>
-          <div className="text-center md:text-left">
+          
+          <div className="text-center md:text-left relative">
             <h2 className="text-4xl font-black uppercase tracking-tighter mb-2">Admin Profile</h2>
             <p className="text-white/80 font-medium mb-4">Master Curator & Brand Manager</p>
             <div className="flex flex-wrap justify-center md:justify-start gap-4">
@@ -328,6 +372,72 @@ export default function Admin() {
                     className="w-full py-5 bg-black text-white rounded-full font-bold text-lg shadow-2xl shadow-black/20 hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
                   >
                     <Check size={20} /> {editingProduct ? 'Update Product' : 'Create Product'}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Profile Pic Modal */}
+      <AnimatePresence>
+        {isProfileModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsProfileModalOpen(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-md bg-white rounded-[3rem] shadow-2xl overflow-hidden"
+            >
+              <div className="p-8 border-b border-gray-100 flex justify-between items-center">
+                <h2 className="text-3xl font-black uppercase tracking-tighter">Edit Profile Pic</h2>
+                <button onClick={() => setIsProfileModalOpen(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                  <X size={24} />
+                </button>
+              </div>
+
+              <form onSubmit={handleProfilePicSubmit} className="p-8 space-y-6">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-widest text-gray-400">Upload New Picture</label>
+                  <div className="grid grid-cols-1 gap-6">
+                    <div className="relative group">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        className="absolute inset-0 opacity-0 cursor-pointer z-10"
+                      />
+                      <div className="w-full py-12 border-2 border-dashed border-gray-200 rounded-3xl flex flex-col items-center justify-center gap-3 group-hover:border-purple-500 transition-all bg-gray-50">
+                        <Upload className="text-gray-400 group-hover:text-purple-500" />
+                        <span className="text-xs font-bold uppercase tracking-widest text-gray-400 group-hover:text-purple-500">Upload File</span>
+                      </div>
+                    </div>
+                    <div className="aspect-square w-32 mx-auto rounded-full bg-gray-50 border border-gray-100 overflow-hidden flex items-center justify-center relative">
+                      {previewUrl ? (
+                        <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                      ) : (
+                        <div className="text-center p-6">
+                          <AlertCircle className="mx-auto text-gray-200 mb-2" size={32} />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-6">
+                  <button
+                    type="submit"
+                    className="w-full py-5 bg-black text-white rounded-full font-bold text-lg shadow-2xl shadow-black/20 hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
+                  >
+                    <Check size={20} /> Save Profile Pic
                   </button>
                 </div>
               </form>

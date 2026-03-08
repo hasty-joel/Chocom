@@ -33,6 +33,40 @@ async function startServer() {
   const upload = multer({ storage });
 
   // API Routes
+  app.post("/api/login", (req, res) => {
+    const { username, password } = req.body;
+    if (username === "brain" && password === "marvin") {
+      res.json({ success: true, token: "fake-jwt-token" });
+    } else {
+      res.status(401).json({ error: "Invalid credentials" });
+    }
+  });
+
+  app.get("/api/admin/profile", (req, res) => {
+    try {
+      const profilePic = db.prepare("SELECT value FROM admin_settings WHERE key = 'profile_pic'").get() as any;
+      res.json({ profile_pic: profilePic?.value });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch profile" });
+    }
+  });
+
+  app.post("/api/admin/profile-pic", upload.single("image"), (req, res) => {
+    try {
+      let imageUrl = req.body.imageUrl;
+      if (req.file) {
+        imageUrl = `/uploads/${req.file.filename}`;
+      }
+      
+      if (!imageUrl) return res.status(400).json({ error: "No image provided" });
+
+      db.prepare("UPDATE admin_settings SET value = ? WHERE key = 'profile_pic'").run(imageUrl);
+      res.json({ success: true, imageUrl });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update profile pic" });
+    }
+  });
+
   app.get("/api/products", (req, res) => {
     try {
       const products = db.prepare("SELECT * FROM products ORDER BY created_at DESC").all();
