@@ -204,7 +204,7 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'product
           </div>
           <button
             onClick={() => openModal()}
-            className="px-8 py-4 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-full font-bold flex items-center gap-2 shadow-xl shadow-purple-500/20 hover:shadow-blue-500/40 transition-all"
+            className="px-8 py-4 bg-white text-purple-600 border border-purple-100 rounded-full font-bold flex items-center gap-2 shadow-xl shadow-purple-500/20 hover:bg-purple-50 transition-all"
           >
             <Plus size={20} /> Add Product
           </button>
@@ -385,7 +385,7 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'product
                 <div className="pt-6">
                   <button
                     type="submit"
-                    className="w-full py-5 bg-black text-white rounded-full font-bold text-lg shadow-2xl shadow-black/20 hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
+                    className="w-full py-5 bg-white text-purple-600 border border-purple-100 rounded-full font-bold text-lg shadow-2xl shadow-purple-500/20 hover:bg-purple-50 transition-all flex items-center justify-center gap-2"
                   >
                     <Check size={20} /> {editingProduct ? 'Update Product' : 'Create Product'}
                   </button>
@@ -451,7 +451,7 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'product
                 <div className="pt-6">
                   <button
                     type="submit"
-                    className="w-full py-5 bg-black text-white rounded-full font-bold text-lg shadow-2xl shadow-black/20 hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
+                    className="w-full py-5 bg-white text-purple-600 border border-purple-100 rounded-full font-bold text-lg shadow-2xl shadow-purple-500/20 hover:bg-purple-50 transition-all flex items-center justify-center gap-2"
                   >
                     <Check size={20} /> Save Profile Pic
                   </button>

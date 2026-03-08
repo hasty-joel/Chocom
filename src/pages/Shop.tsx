@@ -84,7 +84,7 @@ useEffect(() => {
                   onClick={() => setActiveCategory(cat)}
                   className={`px-6 py-3 rounded-xl text-xs font-bold whitespace-nowrap transition-all border ${
                     activeCategory === cat 
-                      ? 'bg-black text-white border-black shadow-lg' 
+                      ? 'bg-white text-purple-600 border-purple-600 shadow-lg shadow-purple-500/20' 
                       : 'bg-white text-gray-600 border-gray-100 hover:bg-gray-50'
                   }`}
                 >
@@ -135,7 +135,7 @@ useEffect(() => {
                   <p className="text-gray-500 text-sm line-clamp-2 mb-4">{product.description}</p>
                   <button
                     onClick={() => onProductClick(product)}
-                    className="w-full py-3 rounded-xl bg-gray-50 text-gray-900 font-bold text-sm hover:bg-black hover:text-white transition-colors"
+                    className="w-full py-3 rounded-xl bg-white text-purple-600 border border-purple-50 font-bold text-sm hover:bg-purple-50 transition-colors shadow-sm"
                   >
                     View Details
                   </button>
