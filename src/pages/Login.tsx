@@ -45,7 +45,7 @@ export default function Login({ onLogin }: LoginProps) {
         className="w-full max-w-md bg-white p-10 rounded-[3rem] shadow-2xl border border-gray-100"
       >
         <div className="text-center mb-10">
-          <div className="w-20 h-20 bg-linear-to-r from-blue-600 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-purple-500/20">
+          <div className="w-20 h-20 bg-blue-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl shadow-blue-500/20">
             <Lock className="text-white" size={32} />
           </div>
           <h1 className="text-4xl font-black uppercase tracking-tighter">Admin Login</h1>
@@ -63,7 +63,7 @@ export default function Login({ onLogin }: LoginProps) {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full pl-12 pr-6 py-4 rounded-2xl bg-gray-50 border border-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
-                placeholder="brain"
+                placeholder="brian"
               />
             </div>
           </div>
@@ -96,7 +96,7 @@ export default function Login({ onLogin }: LoginProps) {
           <button
             disabled={loading}
             type="submit"
-            className="w-full py-5 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-full font-bold text-lg flex items-center justify-center gap-3 shadow-2xl shadow-purple-500/20 hover:shadow-blue-500/40 transition-all disabled:opacity-50"
+            className="w-full py-5 bg-white text-purple-600 rounded-full font-bold text-lg flex items-center justify-center gap-3 shadow-2xl shadow-purple-500/20 hover:bg-purple-50 transition-all border border-purple-100 disabled:opacity-50"
           >
             {loading ? 'Authenticating...' : 'Sign In'} <ArrowRight size={20} />
           </button>

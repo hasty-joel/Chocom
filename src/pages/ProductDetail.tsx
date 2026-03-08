@@ -77,11 +77,11 @@ export default function ProductDetail({ product, onBack, onAddToCart }: ProductD
             <div className="flex flex-col sm:flex-row gap-4">
               <button
                 onClick={() => onAddToCart(product)}
-                className="flex-1 py-5 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-full font-bold text-lg flex items-center justify-center gap-3 shadow-2xl shadow-purple-500/20 hover:shadow-blue-500/40 transition-all"
+                className="flex-1 py-5 bg-white text-purple-600 rounded-full font-bold text-lg flex items-center justify-center gap-3 shadow-2xl shadow-purple-500/20 hover:shadow-purple-500/40 transition-all border border-purple-50"
               >
                 <ShoppingBag size={20} /> Add to Cart
               </button>
-              <button className="px-8 py-5 border-2 border-gray-100 rounded-full font-bold hover:border-gray-300 transition-all">
+              <button className="px-8 py-5 border-2 border-gray-100 rounded-full font-bold text-purple-600 hover:border-purple-200 hover:bg-purple-50 transition-all">
                 Wishlist
               </button>
             </div>

@@ -26,7 +26,7 @@ export default function Cart({ items, onUpdateQuantity, onRemove, onCheckout, on
         <p className="text-gray-500 mb-8 max-w-md">Looks like you haven't added anything to your cart yet. Explore our latest collection.</p>
         <button
           onClick={onShop}
-          className="px-10 py-4 bg-black text-white rounded-full font-bold hover:bg-gray-800 transition-colors"
+          className="px-10 py-4 bg-white text-purple-600 border border-purple-100 rounded-full font-bold hover:bg-purple-50 transition-colors shadow-lg shadow-purple-500/10"
         >
           Start Shopping
         </button>
@@ -125,7 +125,7 @@ export default function Cart({ items, onUpdateQuantity, onRemove, onCheckout, on
 
               <button
                 onClick={onCheckout}
-                className="w-full py-5 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-full font-bold text-lg flex items-center justify-center gap-3 shadow-2xl shadow-purple-500/20 hover:shadow-blue-500/40 transition-all"
+                className="w-full py-5 bg-white text-purple-600 rounded-full font-bold text-lg flex items-center justify-center gap-3 shadow-2xl shadow-purple-500/20 hover:shadow-purple-500/40 transition-all border border-purple-50"
               >
                 Checkout <ArrowRight size={20} />
               </button>

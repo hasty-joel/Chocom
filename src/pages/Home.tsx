@@ -102,7 +102,7 @@ export default function Home({ onShopNow }: { onShopNow: () => void }) {
               placeholder="Enter your email"
               className="flex-1 px-8 py-4 rounded-full bg-white border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
             />
-            <button className="px-10 py-4 bg-black text-white rounded-full font-bold hover:bg-gray-800 transition-colors">
+            <button className="px-10 py-4 bg-white text-purple-600 border border-purple-100 rounded-full font-bold hover:bg-purple-50 transition-colors shadow-lg shadow-purple-500/10">
               Subscribe
             </button>
           </form>
