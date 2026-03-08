@@ -8,20 +8,25 @@ interface ShopProps {
   onAddToCart: (product: Product) => void;
 }
 
+
 export default function Shop({ onProductClick, onAddToCart }: ShopProps) {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
 
-  useEffect(() => {
-    fetch('/api/products')
-      .then(res => res.json())
-      .then(data => {
-        setProducts(data);
-        setLoading(false);
-      });
-  }, []);
+useEffect(() => {
+  fetch('/products.json')
+    .then(res => res.json())
+    .then((data) => {
+      setProducts(data);
+      setLoading(false);
+    })
+    .catch(err => {
+      console.error("Failed to load products.json", err);
+      setLoading(false);
+    });
+}, []);
 
   const categories = ['All', ...Array.from(new Set(products.map(p => p.category)))];
   

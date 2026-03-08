@@ -4,13 +4,13 @@
     "name": "CHOCO M Hoodie",
     "price": "50",
     "description": "Stylish street hoodie",
-    "image": "images/hoodie1.jpg"
+    "image": "/images/hoodie1.jpg"
   },
   {
     "id": 2,
     "name": "CHOCO M Tee",
     "price": "25",
     "description": "Urban street tee",
-    "image": "images/tee1.jpg"
+    "image": "/images/tee1.jpg"
   }
 ]

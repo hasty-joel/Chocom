@@ -3,6 +3,10 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Plus, Trash2, Edit2, X, Upload, Check, AlertCircle } from 'lucide-react';
 import { Product } from '../types';
 
+// Separate previews for product and profile modals
+const [productPreview, setProductPreview] = useState<string | null>(null);
+const [profilePreview, setProfilePreview] = useState<string | null>(null);
+
 export default function Admin() {
   const [products, setProducts] = useState<Product[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,13 +45,14 @@ export default function Admin() {
       .then(data => setAdminProfile(data));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setSelectedFile(file);
-      setPreviewUrl(URL.createObjectURL(file));
-    }
-  };
+const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'product' | 'profile') => {
+  if (e.target.files && e.target.files[0]) {
+    const file = e.target.files[0];
+    setSelectedFile(file);
+    if (type === 'product') setProductPreview(URL.createObjectURL(file));
+    else setProfilePreview(URL.createObjectURL(file));
+  }
+};
 
   const handleProfilePicSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,7 +95,18 @@ export default function Admin() {
       const res = await fetch(url, { method, body: data });
       if (res.ok) {
         fetchProducts();
-        closeModal();
+        const closeModal = () => {
+          setIsModalOpen(false);
+          setEditingProduct(null);
+          setFormData({ name: '', price: '', description: '', category: '', imageUrl: '' });
+          setSelectedFile(null);
+          setProductPreview(null);
+        };
+        const closeProfileModal = () => {
+          setIsProfileModalOpen(false);
+          setSelectedFile(null);
+          setProfilePreview(null);
+        };
       }
     } catch (error) {
       console.error("Error saving product", error);
@@ -388,7 +404,7 @@ export default function Admin() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsProfileModalOpen(false)}
+              onClick={() => closeProfileModal()}
               className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             />
             <motion.div
@@ -412,7 +428,7 @@ export default function Admin() {
                       <input
                         type="file"
                         accept="image/*"
-                        onChange={handleFileChange}
+                        onChange={e => handleFileChange(e, 'product')}
                         className="absolute inset-0 opacity-0 cursor-pointer z-10"
                       />
                       <div className="w-full py-12 border-2 border-dashed border-gray-200 rounded-3xl flex flex-col items-center justify-center gap-3 group-hover:border-purple-500 transition-all bg-gray-50">
@@ -421,13 +437,13 @@ export default function Admin() {
                       </div>
                     </div>
                     <div className="aspect-square w-32 mx-auto rounded-full bg-gray-50 border border-gray-100 overflow-hidden flex items-center justify-center relative">
-                      {previewUrl ? (
-                        <img src={previewUrl} alt="Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-                      ) : (
-                        <div className="text-center p-6">
-                          <AlertCircle className="mx-auto text-gray-200 mb-2" size={32} />
-                        </div>
-                      )}
+                  {profilePreview ? (
+                    <img src={profilePreview} alt="Preview" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  ) : (
+                    <div className="text-center p-6">
+                      <AlertCircle className="mx-auto text-gray-200 mb-2" size={32} />
+                    </div>
+                  )}
                     </div>
                   </div>
                 </div>
